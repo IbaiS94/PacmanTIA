@@ -246,6 +246,8 @@ class StayEastSearchAgent(SearchAgent):
         self.searchType = lambda state: PositionSearchProblem(state, costFn, (1, 1), None, False)
 
 
+
+
 class StayWestSearchAgent(SearchAgent):
     """
     An agent for position search with a cost function that penalizes being in

@@ -13,7 +13,7 @@
 
 
 # game.py
-# -------
+# -------9
 # Licensing Information: Please do not distribute or publish solutions to this
 # project. You are free to use and extend these projects for educational
 # purposes. The Pacman AI projects were developed at UC Berkeley, primarily by
