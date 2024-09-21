@@ -96,14 +96,46 @@ def depthFirstSearch(problem):
     """  """
     
     "*** YOUR CODE HERE ***"
+    #problem.getSucessors carga el estado actual en problem.visitedList
     import pacman.pacmanRules
     pacman.pacmanRules.applyAction('North')
     util.raiseNotDefined()
 
-    visitados = []
-    #evaluar(problem.getStartState())
+    
+    movimientos = util.Stack()
+    win = False
+    
     def evaluar(casilla):
-        succs = util.Stack()
+        if casilla.isGoalState(): #si esta casilla es la meta, devuelve los movimientos y w=True (primera comprobación)
+            print("WIN")
+            return movimientos, True
+        else: #si no
+            visitados = problem.visitedList #coge los visitados
+            succs = util.Stack()
+            for cas in problem.getSuccessors(casilla): #por cada sucesor posible
+                if not visitados.contains(cas): #si no ha sido visitado
+                    succs.push(cas) #se mete en pila de sucesores factibles
+            if not succs.isEmpty: #si hay sucesores
+                for succ in succs:
+                    movimientos.push(succ[2]) #por cada sucesor recoger su moviemiento 
+                    m, w = evaluar(succ) #y evaluarlo
+                    if w: #si el sucesor es meta
+                        return m, w #devuelve movs y w=True
+            
+            else: #si no tiene sucesores y no es meta (primera comprobación)
+                movimientos.pop() #quitar mov
+                return m, False #devolver movs y w=False
+            
+                
+    movs, win = evaluar(problem.getStartState())
+    print(movs)
+    print(win)
+            
+
+
+
+
+"""     #codigo antiguo
         while problem.isGoalState == False:
             for caminopos in problem.getSuccessors:
                 if caminopos[1] not in visitados:
@@ -113,6 +145,7 @@ def depthFirstSearch(problem):
                 succ = succs.pop()
                 evaluar(succ)
                 pass
+"""
 
 
 def breadthFirstSearch(problem):
