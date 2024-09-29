@@ -97,14 +97,32 @@ def depthFirstSearch(problem):
     
     "*** YOUR CODE HERE ***"
     #problem.getSucessors carga el estado actual en problem.visitedList
-    import pacman.pacmanRules
-    pacman.pacmanRules.applyAction('North')
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
 
     
-    movimientos = util.Stack()
-    win = False
-    
+    movimientos = util.Stack() #almacena los movimientos (duh)
+    win = False #será true cuando encuentre la meta
+    succs = util.Stack #guarda las casillas que se analizarám acontinuación
+    casilla = problem.getStartState() #inicializa la primera casilla a analizar en la salida
+
+    while not win: #no para hasta ganar (¡cuánta determinación!)
+        if not succs.isEmpty(): #este if previene de popear de una pila vacía al iniciar
+            casilla = succs.pop()
+            movimientos.push(casilla[2]) #guarda el movimiento realizado para "desplazarse a la casilla"
+        if casilla.isGoalState(): #si esta casilla es la meta, devuelve los movimientos y w=True (primera comprobación)
+            print("WIN")
+            print(movimientos)
+            return movimientos, True
+        else: #si no
+            visitados = problem.visitedList #coge los visitados
+            print(visitados)
+            for cas in problem.getSuccessors(casilla): #por cada sucesor posible (problem:getSuccessors(casilla) carga casilla en problem.visitedList)
+                if not visitados.contains(cas): #si no ha sido visitado
+                    succs.push(cas) #se mete en pila de sucesores factibles
+
+
+
+    """codigo recursivo antiguo
     def evaluar(casilla):
         if casilla.isGoalState(): #si esta casilla es la meta, devuelve los movimientos y w=True (primera comprobación)
             print("WIN")
@@ -119,8 +137,8 @@ def depthFirstSearch(problem):
                 for succ in succs:
                     movimientos.push(succ[2]) #por cada sucesor recoger su moviemiento 
                     m, w = evaluar(succ) #y evaluarlo
-                    if w: #si el sucesor es meta
-                        return m, w #devuelve movs y w=True
+                    if w: #vs ysi el sucesor es meta
+                        return m, w #devuelve mo w=True
             
             else: #si no tiene sucesores y no es meta (primera comprobación)
                 movimientos.pop() #quitar mov
@@ -129,7 +147,7 @@ def depthFirstSearch(problem):
                 
     movs, win = evaluar(problem.getStartState())
     print(movs)
-    print(win)
+    print(win)"""
             
 
 
