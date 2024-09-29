@@ -102,23 +102,28 @@ def depthFirstSearch(problem):
     
     movimientos = util.Stack() #almacena los movimientos (duh)
     win = False #será true cuando encuentre la meta
-    succs = util.Stack #guarda las casillas que se analizarám acontinuación
+    succs = util.Stack() #guarda las casillas que se analizarám acontinuación
     casilla = problem.getStartState() #inicializa la primera casilla a analizar en la salida
-
+    it = 0
     while not win: #no para hasta ganar (¡cuánta determinación!)
         if not succs.isEmpty(): #este if previene de popear de una pila vacía al iniciar
             casilla = succs.pop()
-            movimientos.push(casilla[2]) #guarda el movimiento realizado para "desplazarse a la casilla"
-        if casilla.isGoalState(): #si esta casilla es la meta, devuelve los movimientos y w=True (primera comprobación)
+            movimientos.push(casilla[1]) #guarda el movimiento realizado para "desplazarse a la casilla"
+        if problem.isGoalState(casilla): #si esta casilla es la meta, devuelve los movimientos y w=True (primera comprobación)
             print("WIN")
             print(movimientos)
             return movimientos, True
         else: #si no
-            visitados = problem.visitedList #coge los visitados
+            visitados = problem._visitedlist #coge los visitados
             print(visitados)
             for cas in problem.getSuccessors(casilla): #por cada sucesor posible (problem:getSuccessors(casilla) carga casilla en problem.visitedList)
-                if not visitados.contains(cas): #si no ha sido visitado
+                print("cas:")
+                print(cas)
+                if cas not in visitados: #si no ha sido visitado
+                    print(cas, "añadido a pila de visita")
                     succs.push(cas) #se mete en pila de sucesores factibles
+        it = it + 1
+        print(it)
 
 
 
