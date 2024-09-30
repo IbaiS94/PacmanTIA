@@ -18,7 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 from abc import ABC, abstractmethod
-
+import time
 import util
 
 
@@ -104,24 +104,54 @@ def depthFirstSearch(problem):
     win = False #será true cuando encuentre la meta
     succs = util.Stack() #guarda las casillas que se analizarám acontinuación
     casilla = problem.getStartState() #inicializa la primera casilla a analizar en la salida
+    print("inicio:",casilla)
     it = 0
     while not win: #no para hasta ganar (¡cuánta determinación!)
         if not succs.isEmpty(): #este if previene de popear de una pila vacía al iniciar
-            casilla = succs.pop()
-            movimientos.push(casilla[1]) #guarda el movimiento realizado para "desplazarse a la casilla"
-        if problem.isGoalState(casilla): #si esta casilla es la meta, devuelve los movimientos y w=True (primera comprobación)
+            casillacompleta = succs.pop()
+            casilla = casillacompleta[0]
+            print(casilla)
+            movimientos.push(casillacompleta[1]) #guarda el movimiento realizado para "desplazarse a la casilla"
+        if problem.isGoalState(casilla): #si esta casilla es la meta, devuelve los movimientos (primera comprobación)
             print("WIN")
-            print(movimientos)
-            return movimientos, True
+            mapeo = []
+            while not movimientos.isEmpty():
+                mov = movimientos.pop()
+                print(mov)
+                mapeo.append(mov)
+            mapeo.reverse() #les da la vuelta para devolverlos en orden
+            return mapeo
         else: #si no
             visitados = problem._visitedlist #coge los visitados
+            print("visitados:")
             print(visitados)
+            retroceso = True
+            retrocesoCount = 1
             for cas in problem.getSuccessors(casilla): #por cada sucesor posible (problem:getSuccessors(casilla) carga casilla en problem.visitedList)
-                print("cas:")
-                print(cas)
-                if cas not in visitados: #si no ha sido visitado
+                print("cas:",cas)
+                if cas[0] not in visitados: #si no ha sido visitado
+                    retroceso = False
                     print(cas, "añadido a pila de visita")
                     succs.push(cas) #se mete en pila de sucesores factibles
+                
+            if retroceso:
+                pilaVisitados = util.Stack()
+                for v in visitados:
+                    pilaVisitados.push(v)
+                while retroceso:
+                    anterior = pilaVisitados.pop()
+                    print(anterior)
+                    print("pop")
+                    for c2 in problem.getSuccessors(anterior):
+                        if c2[0] not in visitados:
+                            retroceso = False
+                        else:
+                            retrocesoCount = retrocesoCount + 1
+                    if retroceso:
+                        movimientos.pop()
+
+
+        #time.sleep(8000000000)
         it = it + 1
         print(it)
 
