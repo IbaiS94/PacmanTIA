@@ -99,9 +99,6 @@ def depthFirstSearch(problem):
     #problem.getSucessors carga el estado actual en problem.visitedList
     #util.raiseNotDefined()
 
-    
-    movimientos = util.Stack() #almacena los movimientos (duh)
-    win = False #será true cuando encuentre la meta
     succs = util.Stack() #guarda las casillas que se analizarám acontinuación
     casilla = problem.getStartState() #inicializa la primera casilla a analizar en la salida
     print("inicio:",casilla)
@@ -220,7 +217,26 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
+    succs = util.Queue() #guarda las casillas que se analizarám acontinuación
+    casilla = problem.getStartState() #inicializa la primera casilla a analizar en la salida
+    print("inicio:",casilla)
+    #it = 0
+    visitados = set() #estructura de datos más útil
+    succs.push((casilla, []))  # Guardamos la casilla y la lista de movimientos para llegar a ella
+    
+    while not succs.isEmpty(): #mientras queden casillas por analizar
+        casilla_actual, movimientos_actuales = succs.pop() #popeamos la siguiente casilla a analizar y su mov
+        if not casilla_actual in visitados: #si la casilla actual no ha sido visitada
+            visitados.add(casilla_actual) #marcamos la casilla como visitada
+            if problem.isGoalState(casilla_actual): #si es la meta
+                return movimientos_actuales #devolvemos los movs actuales
+            #si no
+            for succ, direc, costo in problem.getSuccessors(casilla_actual):#por cada sucesor de la casilla actual
+                if succ not in visitados:#si no ha sido visitado
+                    succs.push((succ, movimientos_actuales + [direc]))#lo metemos en pila de proximas visitas
+    
+    return movimientos_actuales #debugging en caso de fallo
 
 
 def uniformCostSearch(problem):
