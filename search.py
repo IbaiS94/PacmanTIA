@@ -105,8 +105,24 @@ def depthFirstSearch(problem):
     succs = util.Stack() #guarda las casillas que se analizarám acontinuación
     casilla = problem.getStartState() #inicializa la primera casilla a analizar en la salida
     print("inicio:",casilla)
-    it = 0
-    while not win: #no para hasta ganar (¡cuánta determinación!)
+    #it = 0
+    visitados = set() #estructura de datos más útil
+    succs.push((casilla, []))  # Guardamos la casilla y la lista de movimientos para llegar a ella
+    
+    while not succs.isEmpty(): #mientras queden casillas por analizar
+        casilla_actual, movimientos_actuales = succs.pop() #popeamos la siguiente casilla a analizar y su mov
+        if not casilla_actual in visitados: #si la casilla actual no ha sido visitada
+            visitados.add(casilla_actual) #marcamos la casilla como visitada
+            if problem.isGoalState(casilla_actual): #si es la meta
+                return movimientos_actuales #devolvemos los movs actuales
+            #si no
+            for succ, direc, costo in problem.getSuccessors(casilla_actual):#por cada sucesor de la casilla actual
+                if succ not in visitados:#si no ha sido visitado
+                    succs.push((succ, movimientos_actuales + [direc]))#lo metemos en pila de proximas visitas
+    
+    return movimientos_actuales #debugging en caso de fallo
+
+    """while not win: #no para hasta ganar (¡cuánta determinación!)
         if not succs.isEmpty(): #este if previene de popear de una pila vacía al iniciar
             casillacompleta = succs.pop()
             casilla = casillacompleta[0]
@@ -133,7 +149,7 @@ def depthFirstSearch(problem):
                     retroceso = False
                     print(cas, "añadido a pila de visita")
                     succs.push(cas) #se mete en pila de sucesores factibles
-                
+    
             if retroceso:
                 pilaVisitados = util.Stack()
                 for v in visitados:
@@ -151,9 +167,9 @@ def depthFirstSearch(problem):
                         movimientos.pop()
 
 
-        #time.sleep(8000000000)
+        #time.sleep(2)
         it = it + 1
-        print(it)
+        print(it)"""
 
 
 
