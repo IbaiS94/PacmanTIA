@@ -240,9 +240,29 @@ def breadthFirstSearch(problem):
 
 
 def uniformCostSearch(problem):
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    cola = util.PriorityQueue()
+    visitados = set()
+    
+    inicial = problem.getStartState()
+    
+    cola.push((inicial, [], 0), 0)
+    
+    while not cola.isEmpty():
+        estado, camino, coste = cola.pop()
+        print(str(estado) +"  "+ str(camino) +"  "+ str(coste))
+        
+        if problem.isGoalState(estado):
+            return camino
+        
+        if estado not in visitados:
+            visitados.add(estado)
+            
+            for sucesor, accion, coste_siguiente in problem.getSuccessors(estado):
+                nuevocoste = coste + coste_siguiente
+                cola.push((sucesor, camino + [accion], nuevocoste), nuevocoste)
+    
+    return []
+
 
 
 def nullHeuristic(state, problem=None):
@@ -255,9 +275,29 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
+    cola = util.PriorityQueue()
+    visitados = set()
+    
+    inicial = problem.getStartState()
+    
+    cola.push((inicial, [], 0), 0)
+    
+    while not cola.isEmpty():
+        estado, camino, coste = cola.pop()
+        print(str(estado) +"  "+ str(camino) +"  "+ str(coste))
+        
+        if problem.isGoalState(estado):
+            return camino
+        
+        if estado not in visitados:
+            visitados.add(estado)
+            
+            for sucesor, accion, coste_siguiente in problem.getSuccessors(estado):
+                
+                nuevocoste = coste + coste_siguiente
+                cola.push((sucesor, camino + [accion], nuevocoste), nuevocoste+heuristic(sucesor, problem))
+                print(heuristic(sucesor, problem))
+    return []
 
 # Abbreviations
 bfs = breadthFirstSearch
