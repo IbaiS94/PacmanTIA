@@ -609,8 +609,8 @@ def foodHeuristic(state, problem):
     if not foodList:
         return 0
     
-    for food in foodList:
-        distancia.append(abs(position[0] - food[0]) + abs(position[1] - food[1]))
+    for c in foodList:
+        distancia.append(abs(position[0] - c[0]) + abs(position[1] - c[1]))
     
     
     return max(distancia) """
